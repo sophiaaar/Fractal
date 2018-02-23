@@ -41,6 +41,7 @@ public class Fractal : MonoBehaviour {
 		}
 		gameObject.AddComponent<MeshFilter>().mesh = meshes[Random.Range(0, meshes.Length)];
 		gameObject.AddComponent<MeshRenderer>().material = materials[depth, Random.Range(0, 2)];
+		//Debug.Log(materials);
 		// the following line causes dynamic batching to be less effective by half
 		//GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white, Color.yellow, (float)depth/maxDepth);
 		//Debug.Log(depth);
@@ -82,12 +83,21 @@ public class Fractal : MonoBehaviour {
 			float t = i/(maxDepth - 1f);
 			t *= t;
 			materials[i, 0] = new Material(material);
-			materials[i, 0].color = Color.Lerp(Color.white, Color.yellow, t);
+			//materials[i, 0].color = Color.Lerp(Color.white, Color.yellow, t);
+			materials[i, 0].shader = Shader.Find("graphs/Erosion");
+			// grab property name from shader code
+			materials[i, 0].SetColor("Color_A208B217", Color.Lerp(Color.white, Color.yellow, t));
 			materials[i, 1] = new Material(material);
-			materials[i, 1].color = Color.Lerp(Color.white, Color.cyan, t);
+			//materials[i, 1].color = Color.Lerp(Color.white, Color.cyan, t);
+			materials[i, 1].shader = Shader.Find("graphs/Erosion");
+			materials[i, 1].SetColor("Color_A208B217", Color.Lerp(Color.white, Color.cyan, t));
 		}
-		materials[maxDepth, 0].color = Color.magenta;
-		materials[maxDepth, 1].color = Color.grey;
+		//materials[maxDepth, 0].color = Color.magenta;
+		materials[maxDepth, 0].shader = Shader.Find("graphs/Erosion");
+		materials[maxDepth, 0].SetColor("Color_A208B217", Color.magenta);
+		//materials[maxDepth, 1].color = Color.grey;
+		materials[maxDepth, 1].shader = Shader.Find("graphs/Erosion");
+		materials[maxDepth, 1].SetColor("Color_A208B217", Color.grey);
 	}
 
 	private IEnumerator CreateChildren()
